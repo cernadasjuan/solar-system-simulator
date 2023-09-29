@@ -7,7 +7,7 @@ import {CelestialBody} from './components/CelestialBody';
 import {getAmbientLight} from './components/lights';
 import {Sun} from './components/Sun';
 import {scaleKilometers} from './utils';
-import {createAsteroid} from './components/asteroid';
+import {AsteroidBelt} from './components/AsteroidBelt';
 
 (async function () {
 	const celestialBodyRadiusScaleFactor = 20;
@@ -159,7 +159,22 @@ import {createAsteroid} from './components/asteroid';
 		}
 	});
 
-	scene.add(await createAsteroid({position: new Vector3(1_000_000, 0, 0), scale: 200}));
+	// Asteroid belt
+	const asteroidBelt = new AsteroidBelt({
+		minRadius: scaleKilometers(300_000_000) * celestialBodyDistanceScaleFactor,
+		maxRadius: scaleKilometers(500_000_000) * celestialBodyDistanceScaleFactor,
+		minAsteroidScale: 1,
+		maxAsteroidScale: 10,
+		rotationSpeed: 0.01,
+	});
+
+	await asteroidBelt.initialize();
+
+	for (let i = 0; i < 10; i++) {
+		asteroidBelt.addAsteroid();
+	}
+
+	scene.add(asteroidBelt.asteroids);
 
 	// Render loop
 	function animate() {
@@ -175,6 +190,8 @@ import {createAsteroid} from './components/asteroid';
 		celestialBodies.forEach(celestialBody => {
 			celestialBody.rotate(delta);
 		});
+
+		asteroidBelt.rotate(delta);
 
 		renderer.render(scene, camera);
 		requestAnimationFrame(animate);
