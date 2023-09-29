@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "watch": "npm run build -- --watch",
-    "build": "esbuild src/index.ts --bundle --sourcemap --target=es2015 --outfile=public/index.js",
+    "build": "esbuild src/index.ts --bundle --sourcemap --minify --target=es2015 --outfile=public/index.js",
     "dev": "concurrently \"npm run watch\" \"serve public\""
   },
   "keywords": [],
