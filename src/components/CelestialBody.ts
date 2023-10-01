@@ -74,7 +74,7 @@ export class CelestialBody {
 
 		// Draw orbit (only planets)
 		if (showOrbit) {
-			const orbitGeometry = new TorusGeometry(initialPosition.x, 250, 128, 128);
+			const orbitGeometry = new TorusGeometry(initialPosition.length(), 250, 128, 128);
 			const orbitMaterial = new MeshBasicMaterial({color: 0xffffff});
 			this.orbit = new Mesh(orbitGeometry, orbitMaterial);
 			this.orbit.rotateX(MathUtils.degToRad(90));

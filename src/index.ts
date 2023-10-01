@@ -1,4 +1,4 @@
-import {Clock, type Mesh, Scene, Vector3} from 'three';
+import {Clock, Scene, Vector3} from 'three';
 import {createSkybox} from './components/skybox';
 import {createCamera} from './config/camera';
 import {createRenderer} from './config/renderer';
@@ -6,7 +6,7 @@ import {createControls} from './config/controls';
 import {CelestialBody} from './components/CelestialBody';
 import {getAmbientLight} from './components/lights';
 import {Sun} from './components/Sun';
-import {scaleKilometers} from './utils';
+import {getRandomVectorWithMagnitude, scaleKilometers} from './utils';
 import {AsteroidBelt} from './components/AsteroidBelt';
 
 (async function () {
@@ -39,7 +39,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/mercury.jpeg',
 		axialTiltDegrees: 0.027,
 		selfRotationSpeed: 0.01,
-		initialPosition: new Vector3(scaleKilometers(57_900_000) / 10, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(57_900_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -50,7 +50,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/venus.jpeg',
 		axialTiltDegrees: 177.3,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(108_200_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(108_200_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -61,7 +61,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/earth.jpeg',
 		axialTiltDegrees: 23.44,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(149_600_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(149_600_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -73,7 +73,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		axialTiltDegrees: 0,
 		selfRotationSpeed: 0.1,
 		rotationSpeed: 0.7,
-		initialPosition: new Vector3(scaleKilometers(384400), 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(384400)),
 		parent: earth.mesh,
 		showOrbit: false,
 	});
@@ -83,7 +83,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/mars.jpeg',
 		axialTiltDegrees: 25.19,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(227_900_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(227_900_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -94,7 +94,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/jupiter.jpeg',
 		axialTiltDegrees: 3,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(778_300_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(778_300_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -105,7 +105,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/saturn.jpeg',
 		axialTiltDegrees: 26.74,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(1427_000_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(1427_000_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -130,7 +130,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/uranus.jpeg',
 		axialTiltDegrees: 97.7,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(2871_000_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(2871_000_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -141,7 +141,7 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		texturePath: 'planets/neptune.jpeg',
 		axialTiltDegrees: 28,
 		selfRotationSpeed: 0.1,
-		initialPosition: new Vector3(scaleKilometers(4498_000_000) * celestialBodyDistanceScaleFactor, 0, 0),
+		initialPosition: getRandomVectorWithMagnitude(scaleKilometers(4498_000_000) * celestialBodyDistanceScaleFactor),
 		rotationSpeed: 0.01,
 		parent: sun.mesh,
 	});
@@ -166,13 +166,10 @@ import {AsteroidBelt} from './components/AsteroidBelt';
 		minAsteroidScale: 1,
 		maxAsteroidScale: 10,
 		rotationSpeed: 0.01,
+		numberOfAsteroids: 3000,
 	});
 
 	await asteroidBelt.initialize();
-
-	for (let i = 0; i < 10; i++) {
-		asteroidBelt.addAsteroid();
-	}
 
 	scene.add(asteroidBelt.asteroids);
 

@@ -1,6 +1,7 @@
-import {Group, MathUtils, Matrix4, Vector3} from 'three';
+import {Group, MathUtils, Matrix4} from 'three';
 import {MTLLoader} from 'three/examples/jsm/loaders/MTLLoader.js';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader.js';
+import {getRandomVectorWithMagnitudeInRange} from '../utils';
 
 type Options = {
 	minRadius: number;
@@ -8,6 +9,7 @@ type Options = {
 	minAsteroidScale: number;
 	maxAsteroidScale: number;
 	rotationSpeed: number;
+	numberOfAsteroids: number;
 };
 
 export class AsteroidBelt {
@@ -23,16 +25,13 @@ export class AsteroidBelt {
 		const material = await new MTLLoader().loadAsync('assets/moons/asteroid.mtl');
 		material.preload();
 		const asteroid = await new OBJLoader().setMaterials(material).loadAsync('assets/moons/asteroid.obj');
-		asteroid.position.copy(this.generateRandomPosition());
+		asteroid.position.copy(getRandomVectorWithMagnitudeInRange(this.options.minRadius, this.options.maxRadius));
 		asteroid.scale.addScalar(this.generateRandomScale());
 		this.asteroids.add(asteroid);
-	}
 
-	addAsteroid(): void {
-		const asteroid = this.asteroids.children[0].clone();
-		asteroid.position.copy(this.generateRandomPosition());
-		asteroid.scale.addScalar(this.generateRandomScale());
-		this.asteroids.add(asteroid);
+		for (let i = 0; i < this.options.numberOfAsteroids; i++) {
+			this.addAsteroid();
+		}
 	}
 
 	rotate(delta: number): void {
@@ -44,9 +43,11 @@ export class AsteroidBelt {
 		}
 	}
 
-	private generateRandomPosition(): Vector3 {
-		const randomX = MathUtils.randFloat(this.options.minRadius, this.options.maxRadius);
-		return new Vector3(randomX, 0, 0);
+	private addAsteroid(): void {
+		const asteroid = this.asteroids.children[0].clone();
+		asteroid.position.copy(getRandomVectorWithMagnitudeInRange(this.options.minRadius, this.options.maxRadius));
+		asteroid.scale.addScalar(this.generateRandomScale());
+		this.asteroids.add(asteroid);
 	}
 
 	private generateRandomScale(): number {

@@ -7,5 +7,5 @@ export function getSunlight(): PointLight {
 }
 
 export function getAmbientLight(): AmbientLight {
-	return new AmbientLight(0xffffff, 0.025);
+	return new AmbientLight(0xffffff, 0.075);
 }
